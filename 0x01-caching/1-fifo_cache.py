@@ -20,7 +20,7 @@ class FIFOCache(BaseCaching):
             while len(self.cache_data) > self.MAX_ITEMS:
                 k, _ = next(iter(self.cache_data.items()))
                 del self.cache_data[k]
-                print(f"DISCARD {k}")
+                print(f"DISCARD: {k}")
 
     def get(self, key):
         """ Get an item by key. """
