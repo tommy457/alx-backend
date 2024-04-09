@@ -8,7 +8,7 @@ from flask import (
     render_template,
     request,
     g)
-from typing import Dict
+from typing import Dict, Union
 
 
 users = {
@@ -31,23 +31,7 @@ app.config.from_object(Config())
 babel = Babel(app)
 
 
-@babel.localeselector
-def get_locale() -> str:
-    """ return the best match """
-    lang = request.args.get("locale")
-    if lang in app.config["LANGUAGES"]:
-        return lang
-    if g.user:
-        lang = g.user.get("locale")
-        if lang and lang in app.config["LANGUAGES"]:
-            return lang
-    lang = request.headers.get('locale', None)
-    if lang in app.config['LANGUAGES']:
-        return lang
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
-
-
-def get_user() -> Dict[str, str] | None:
+def get_user() -> Union[Dict[str, str], None]:
     """ return a user if id is found """
     user = request.args.get("login_as")
     try:
@@ -62,10 +46,26 @@ def before_request() -> None:
     g.user = get_user()
 
 
+@babel.localeselector
+def get_locale() -> str:
+    """ return the best match """
+    lang = request.args.get("locale")
+    if lang in app.config["LANGUAGES"]:
+        return lang
+    if g.user:
+        lang = g.user.get("locale")
+        if lang and lang in app.config["LANGUAGES"]:
+            return lang
+    lang = request.headers.get('locale')
+    if lang in app.config['LANGUAGES']:
+        return lang
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+
 @app.route("/")
 def hello():
     """ renders a simple page. """
-    return render_template("6-index.html")
+    return render_template("5-index.html")
 
 
 if __name__ == '__main__':
