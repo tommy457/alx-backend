@@ -41,10 +41,10 @@ def get_locale() -> str:
         lang = g.user.get("locale")
         if lang and lang in app.config["LANGUAGES"]:
             return lang
-    lang = request.accept_languages.best_match(app.config["LANGUAGES"])
-    if lang:
+    lang = request.headers.get('locale', None)
+    if lang in app.config['LANGUAGES']:
         return lang
-    return app.config["BABEL_DEFAULT_LOCALE"]
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 def get_user() -> Dict[str, str] | None:
