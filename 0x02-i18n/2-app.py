@@ -22,7 +22,7 @@ babel = Babel(app)
 
 
 @babel.localeselector
-def get_locale():
+def get_locale() -> str:
     """ return the best match """
     return request.accept_languages.best_match(['en', 'fr'])
 

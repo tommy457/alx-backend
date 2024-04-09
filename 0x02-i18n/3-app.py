@@ -2,7 +2,7 @@
 """
 Module that starts a flask app.
 """
-from flask_babel import Babel, gettext
+from flask_babel import Babel
 from flask import (
     Flask,
     render_template,
@@ -22,7 +22,7 @@ babel = Babel(app)
 
 
 @babel.localeselector
-def get_locale():
+def get_locale() -> str:
     """ return the best match """
     return request.accept_languages.best_match(['en', 'fr'])
 
