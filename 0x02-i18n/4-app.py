@@ -3,7 +3,10 @@
 Module that starts a flask app.
 """
 from flask_babel import Babel
-from flask import Flask, render_template
+from flask import (
+    Flask,
+    render_template,
+    request)
 
 
 class Config:
@@ -18,10 +21,20 @@ app.config.from_object(Config())
 babel = Babel(app)
 
 
+@babel.localeselector
+def get_locale() -> str:
+    """ return the best match """
+    lang = request.args.get("locale")
+    if lang in app.config["LANGUAGES"]:
+        return lang
+
+    return request.accept_languages.best_match(app.config["LANGUAGES"])
+
+
 @app.route("/")
 def hello():
     """ renders a simple page. """
-    return render_template("1-index.html")
+    return render_template("4-index.html")
 
 
 if __name__ == '__main__':
