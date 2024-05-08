@@ -5,9 +5,11 @@ function createPushNotificationsJobs(jobs, queue) {
 
   for (const jobData of jobs) {
     const job = queue.create('push_notification_code_3', jobData);
+
     job.save((err) => {
       if (!err) console.log(`Notification job created: ${job.id}`);
-    }).on('progress', (progress, data) => {
+    });
+    job.on('progress', (progress, data) => {
       console.log(`Notification job ${job.id} ${progress}% complete`);
     }).on('complete', (result) => {
       console.log(`Notification job ${job.id} completed`);
